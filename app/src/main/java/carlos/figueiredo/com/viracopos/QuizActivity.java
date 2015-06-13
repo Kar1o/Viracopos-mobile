@@ -18,9 +18,6 @@ public class QuizActivity extends Activity {
 
     private SystemUiHider answersHider;
 
-    int mLayoutHeight = 0;
-    int mAnimTime = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +36,7 @@ public class QuizActivity extends Activity {
 
             int mControlsHeight;
             int mShortAnimTime;
+
             @Override
             public void onVisibilityChange(boolean visible) {
                 if (mControlsHeight == 0) {
@@ -49,22 +47,6 @@ public class QuizActivity extends Activity {
                             android.R.integer.config_shortAnimTime);
                 }
                 contentAnswers.animate().translationY(visible ? 0 : mControlsHeight).setDuration(mShortAnimTime);
-            }
-        });
-
-        contentAnswers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLayoutHeight == 0) {
-                    mLayoutHeight = contentQuestions.getHeight();
-                }
-                if (mAnimTime == 0) {
-                    mAnimTime = getResources().getInteger(
-                            android.R.integer.config_shortAnimTime);
-                }
-                contentAnswers.animate()
-                        .translationY(visible ? 0 : mLayoutHeight)
-                        .setDuration(mAnimTime);
             }
         });
 
