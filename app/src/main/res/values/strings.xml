@@ -10,7 +10,7 @@
     <string name="title_activity_names">NamesActivity</string>
     <string name="title_activity_report_activity">ReportActivity</string>
 
-    <string name="players_activity_title">Choose the amount of players</string>
+    <string name="players_activity_title">Insert your name to play</string>
     <string name="players_activity_button">Start Game</string>]
     <string name="players_activity_button2">Check Rank</string>
 

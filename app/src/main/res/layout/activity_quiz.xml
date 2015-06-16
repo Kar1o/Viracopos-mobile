@@ -5,63 +5,73 @@
 
     <TextView android:id="@+id/fullscreen_questions" android:layout_width="match_parent"
         android:layout_height="match_parent" android:keepScreenOn="true" android:textColor="#33b5e5"
-        android:textStyle="bold" android:textSize="50sp" android:gravity="center"
-        android:text="@string/dummy_content" />
+        android:textStyle="bold" android:textSize="50sp" android:gravity="center" />
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fullscreen_answers"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_overlay"
+    android:background="@color/background_material_dark"
     tools:context="carlos.figueiredo.com.viracopos.QuizActivity">
 
-    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
 
-
-
-    <Button android:id="@+id/dummy_button" style="?metaButtonBarButtonStyle"
+    <!--<Button android:id="@+id/dummy_button" style="?metaButtonBarButtonStyle"
         android:layout_width="0dp" android:layout_height="wrap_content"
-        android:layout_weight="1" android:text="@string/dummy_button" />
+        android:layout_weight="1" android:text="@string/dummy_button" />-->
 
-        <CheckBox
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup">
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New CheckBox"
-            android:id="@+id/checkBox"
-            android:layout_gravity="left|top" />
+            android:id="@+id/option1"
+            android:layout_marginTop="35dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New CheckBox"
-            android:id="@+id/checkBox2"
-            android:layout_gravity="right|top" />
+            android:id="@+id/option2"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/option1"
+            android:layout_alignParentStart="true" />
 
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New CheckBox"
-            android:id="@+id/checkBox3"
-            android:layout_gravity="left|center_vertical" />
+            android:id="@+id/option3"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/option2"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
 
-        <CheckBox
+        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New CheckBox"
-            android:id="@+id/checkBox4"
-            android:layout_gravity="right|center_vertical" />
+            android:id="@+id/option4"
+            android:layout_below="@+id/option3"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp" />
+
+    </RadioGroup>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:id="@+id/button"
-            android:layout_gravity="center_horizontal|bottom" />
+            android:id="@+id/confirmButton"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
-    </FrameLayout>
-
-</LinearLayout>
+</RelativeLayout>
     </FrameLayout>
 

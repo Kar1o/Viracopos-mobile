@@ -8,12 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 public class PlayersActivity extends ActionBarActivity {
 
-    private Spinner spnPlayers;
+    private EditText edtName;
 
     private Button btnPlayers, btnRank;
 
@@ -23,25 +25,28 @@ public class PlayersActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_players);
 
-        spnPlayers = (Spinner) findViewById(R.id.spnPlayers);
 
+        edtName = (EditText) findViewById(R.id.edtName);
         btnPlayers = (Button) findViewById(R.id.btnPlayers);
-
         btnRank = (Button) findViewById(R.id.btnRank);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.spnPlayers, android.R.layout.simple_spinner_dropdown_item);
 
-        spnPlayers.setAdapter(adapter);
+        spnPlayers.setAdapter(adapter);*/
 
         btnPlayers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                int qtdPlayers = Integer.parseInt(spnPlayers.getSelectedItem().toString());
-                Intent startGame = new Intent(getApplicationContext(), NamesActivity.class);
-                startGame.putExtra("qtdPlayers", qtdPlayers);
-                startActivity(startGame);
+                if (edtName.getText().toString().equals("")){
+                    Toast.makeText(getBaseContext(), "You have to insert your name first", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Intent startGame = new Intent(getApplicationContext(), QuizActivity.class);
+                    startGame.putExtra("name", edtName.getText().toString());
+                    startActivity(startGame);
+                }
             }
         });
 

@@ -84,7 +84,6 @@ public class ReportActivity extends ActionBarActivity {
 
     private class HttpAsyncTask extends AsyncTask<String, Void, JSONArray> {
 
-
          @Override
          protected JSONArray doInBackground(String... urls) {
              return GET(urls[0]);

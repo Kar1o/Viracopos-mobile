@@ -13,18 +13,14 @@
         <activity
             android:name=".PlayersActivity"
             android:immersive="true"
-            android:label="@string/title_activity_players"
+
             android:screenOrientation="portrait" >
             <intent-filter>
+                android:label="@string/title_activity_players"
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".NamesActivity"
-            android:label="@string/title_activity_names"
-            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ReportActivity"
@@ -34,12 +30,6 @@
         <activity
             android:name=".QuizActivity"
             android:label="@string/title_activity_quiz"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name=".test"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_test"
             android:screenOrientation="landscape" >
         </activity>
     </application>

@@ -22,13 +22,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp" />
 
-    <Spinner
-        android:layout_width="120dp"
+    <EditText
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:id="@+id/spnPlayers"
+        android:id="@+id/edtName"
         android:layout_below="@+id/txtPlayers"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp" />
+        android:layout_marginTop="80dp"
+        android:singleLine="true"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -36,7 +37,7 @@
         android:text="@string/players_activity_button"
         android:id="@+id/btnPlayers"
         android:layout_marginTop="80dp"
-        android:layout_below="@+id/spnPlayers"
+        android:layout_below="@+id/edtName"
         android:layout_centerHorizontal="true" />
 
     <Button
