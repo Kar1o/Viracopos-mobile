@@ -1,5 +1,6 @@
 package carlos.figueiredo.com.viracopos;
 
+import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReportActivity extends ActionBarActivity {
+public class ReportActivity extends Activity {
 
     ListView rankList;
 
@@ -53,18 +54,6 @@ public class ReportActivity extends ActionBarActivity {
             httpAsyncTask.execute(url);
         }
 
-    }
-
-    protected void onResume() {
-        super.onResume();
-        //adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, values);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_report_activity, menu);
-        return true;
     }
 
     @Override
@@ -92,7 +81,7 @@ public class ReportActivity extends ActionBarActivity {
          @Override
          protected void onPostExecute(JSONArray arrayResult) {
              JSONObject objectResult;
-             Toast.makeText(getBaseContext(), "sucess", Toast.LENGTH_SHORT).show();
+             //Toast.makeText(getBaseContext(), "sucess", Toast.LENGTH_SHORT).show();
 
              for (int i = 0; i < arrayResult.length(); i++) {
                  try {

@@ -1,6 +1,9 @@
 package carlos.figueiredo.com.viracopos;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,7 +27,9 @@ public class PlayersActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_players);
-
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         edtName = (EditText) findViewById(R.id.edtName);
         btnPlayers = (Button) findViewById(R.id.btnPlayers);
@@ -76,7 +81,20 @@ public class PlayersActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle("About Viracopos")
+                    .setMessage("Version: 0.90\nGame Created for a college project\nThe source code can be found at Github ")
+                    .setPositiveButton("OK", null)
+                    .setNegativeButton("Open Github", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Kar1o/Viracopos-mobile"));
+                            startActivity(browserIntent);
+                        }
+                    })
+                    .show();
             return true;
         }
 

@@ -3,6 +3,7 @@ package carlos.figueiredo.com.viracopos;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -27,6 +28,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import carlos.figueiredo.com.viracopos.Model.Player;
@@ -50,11 +54,13 @@ public class QuizActivity extends Activity {
 
     private Round round = new Round();
 
+    private Random random = new Random();
+
     private String url;
 
-    private int currentRound = 1, totalRound = 0;
+    private int currentRound = 1, totalRound;
 
-    private Random random = new Random();
+    private List<String> answers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,7 @@ public class QuizActivity extends Activity {
         player.setNome(getIntent().getExtras().getString("name"));
 
         new HttpAsyncTask().execute(newUrl());
+        new HttpAsyncQuestion().execute("http://23.239.18.68:8080/question_total");
 
         answersHider = SystemUiHider.getInstance(this, contentAnswers, View.SYSTEM_UI_FLAG_LOW_PROFILE);
         answersHider.setup();
@@ -136,51 +143,118 @@ public class QuizActivity extends Activity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (option1.isChecked() || option2.isChecked() || option3.isChecked() || option4.isChecked()) {
-                    //Toast.makeText(getBaseContext(), "option selected", Toast.LENGTH_SHORT).show();
-                    if (isConnected()) {
-                        currentRound += 1;
-                        new HttpAsyncTask().execute(newUrl());
-                        //changeQuestion(round);
-                        radioGroup.clearCheck();
-                        answersHider.toggle();
-
-                    }
-                    else {
-                        Toast.makeText(getBaseContext(), "Connection Problem!", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                } else {
-                    Toast.makeText(getBaseContext(), "Choose an answer", Toast.LENGTH_SHORT).show();
-                }
-
+                confirmButton();
             }
         });
 
-
         }
 
-    /*private void checkAnswer() {
+    private void confirmButton(){
+        if (option1.isChecked() || option2.isChecked() || option3.isChecked() || option4.isChecked()) {
+            if (currentRound < totalRound) {
+                if (isConnected()) {
+                    checkAnswer();
+                    currentRound += 1;
+                    new HttpAsyncTask().execute(newUrl());
+                    //changeQuestion(round);
+                    answersHider.toggle();
+
+                } else {
+                    Toast.makeText(getBaseContext(), "Connection Problem!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else{
+                checkAnswer();
+                new HttpAsyncInsert().execute("http://23.239.18.68:8080/new_player?name=" + player.getNome() + "&score=" + player.getPontos());
+                new AlertDialog.Builder(this)
+                        .setTitle("Game Over")
+                        .setMessage("Your Score was: " + player.getPontos() + "\nDo you want to play again ? (different questions may appear)")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent startGame = new Intent(getApplicationContext(), QuizActivity.class);
+                                startGame.putExtra("name", player.getNome());
+                                startActivity(startGame);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Check ranking", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent endGame = new Intent(getApplicationContext(), ReportActivity.class);
+                                startActivity(endGame);
+                                finish();
+                            }
+                        })
+                        .show();
+
+            }
+
+        } else {
+            Toast.makeText(getBaseContext(), "Choose an answer", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkAnswer() {
         int selectedRadio = radioGroup.getCheckedRadioButtonId();
 
-        if (selectedRadio == 1) {
-
+        if (selectedRadio == R.id.option1) {
+            //System.out.println(option1.getText().toString());
+            if (option1.getText().toString().equals(round.getAnswer1())){
+                player.setPontos();
+                Toast.makeText(getBaseContext(), "Correct your score is: " + player.getPontos(), Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getBaseContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
         }
-    }*/
+        else if (selectedRadio == R.id.option2) {
+            //System.out.println(option2.getText().toString());
+            if (option2.getText().toString().equals(round.getAnswer1())){
+                player.setPontos();
+                Toast.makeText(getBaseContext(), "Correct your score is: " + player.getPontos(), Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getBaseContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
+        }
+        else if (selectedRadio == R.id.option3) {
+            //System.out.println(option3.getText().toString());
+            if (option3.getText().toString().equals(round.getAnswer1())){
+                player.setPontos();
+                Toast.makeText(getBaseContext(), "Correct your score is: " + player.getPontos(), Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getBaseContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
+        }
+        else if (selectedRadio == R.id.option4) {
+            //System.out.println(option4.getText().toString());
+            if (option4.getText().toString().equals(round.getAnswer1())){
+                player.setPontos();
+                Toast.makeText(getBaseContext(), "Correct your score is: " + player.getPontos(), Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getBaseContext(), "Wrong answer", Toast.LENGTH_SHORT).show();
+        }
+        radioGroup.clearCheck();
+    }
 
     private String newUrl() {
         url = "http://23.239.18.68:8080/question?round=" + currentRound + "&index=" + (random.nextInt(4) + 1);
         return url;
     }
 
-    private void changeQuestion(Round round) {
+    private void changeQuestion() {
+        answers.clear();
+        answers.add(round.getAnswer1());
+        answers.add(round.getAnswer2());
+        answers.add(round.getAnswer3());
+        answers.add(round.getAnswer4());
+        Collections.shuffle(answers);
+
         questions.setText(round.getQuestion());
-        option1.setText(round.getAnswer1());
-        option2.setText(round.getAnswer2());
-        option3.setText(round.getAnswer3());
-        option4.setText(round.getAnswer4());
+        option1.setText(answers.get(0));
+        option2.setText(answers.get(1));
+        option3.setText(answers.get(2));
+        option4.setText(answers.get(3));
 
     }
 
@@ -193,7 +267,7 @@ public class QuizActivity extends Activity {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            Toast.makeText(getBaseContext(), "sucess", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getBaseContext(), "sucess", Toast.LENGTH_SHORT).show();
 
             try {
 
@@ -202,13 +276,7 @@ public class QuizActivity extends Activity {
                 round.setAnswer2(result.getString("answer2"));
                 round.setAnswer3(result.getString("answer3"));
                 round.setAnswer4(result.getString("answer4"));
-                changeQuestion(round);
-                /*
-                questions.setText(result.getString("question"));
-                option1.setText(result.getString("answer1"));
-                option2.setText(result.getString("answer2"));
-                option3.setText(result.getString("answer3"));
-                option4.setText(result.getString("answer4"));*/
+                changeQuestion();
 
 
             } catch (JSONException e) {
@@ -217,6 +285,45 @@ public class QuizActivity extends Activity {
 
             System.out.println(result);
         }
+    }
+
+    private class HttpAsyncInsert extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... urls) {
+            return GETPicture(urls[0]);
+        }
+    }
+
+    private class HttpAsyncQuestion extends AsyncTask<String, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(String... urls) {
+            return GETint(urls[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            //Toast.makeText(getBaseContext(), "sucess", Toast.LENGTH_SHORT).show();
+
+            totalRound = result;
+
+            System.out.println(result);
+        }
+    }
+
+    public static boolean GETPicture(String url){
+
+        HttpClient httpClient = new DefaultHttpClient();
+
+        try {
+            HttpResponse httpResponse = httpClient.execute(new HttpGet(url));
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     public static JSONObject GET(String url) {
@@ -246,6 +353,33 @@ public class QuizActivity extends Activity {
         return result;
     }
 
+    public static int GETint(String url) {
+        InputStream inputStream;
+        BufferedReader bufferedReader;
+        int result = 0;
+        String line;
+
+        try{
+            HttpClient httpClient = new DefaultHttpClient();
+
+            HttpResponse httpResponse = httpClient.execute(new HttpGet(url));
+
+            inputStream = httpResponse.getEntity().getContent();
+
+            if (inputStream != null){
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                if ((line = bufferedReader.readLine()) != null) {
+                    result = Integer.parseInt(line);
+                }
+                inputStream.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public boolean isConnected(){
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
@@ -260,15 +394,16 @@ public class QuizActivity extends Activity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Exit Game")
                 .setMessage("Progress will be lost! Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
+                .setNegativeButton("No", null)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent backButton = new Intent(getBaseContext(), PlayersActivity.class);
+                        startActivity(backButton);
                         finish();
                     }
 
                 })
-                .setNegativeButton("No", null)
                 .show();
     }
 }
